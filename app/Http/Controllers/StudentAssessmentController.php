@@ -162,9 +162,6 @@ class StudentAssessmentController extends Controller
         \Log::debug($request->all()); // This will log the incoming request data
 
         // Validate the input
-
-
-        // Check if assessment_type exists and is an array
         if (!is_array($request->assessment_type) || count($request->assessment_type) === 0) {
             return response()->json(['message' => 'No assessment data provided.'], 400);
         }
@@ -172,16 +169,22 @@ class StudentAssessmentController extends Controller
         // Prepare data for insertion
         $data = [];
         foreach ($request->assessment_type as $key => $type) {
+            $score = $request->score[$key];
+            $maxScore = $request->max_score[$key];
+
+            // Calculate the percentage
+            $percentage = ($score / $maxScore) * 100; // Assuming score and max_score are numbers
+
             $data[] = [
                 'quarter' => $request->quarter[$key],
                 'assessment_type' => $type,
-                'score' => $request->score[$key],
-                'max_score' => $request->max_score[$key],
+                'score' => $score,
+                'max_score' => $maxScore,
+                'percentage' => $percentage, // Store the calculated percentage
                 'date' => $request->date_executed[$key],
                 'image' => $request->image[$key] ?? null,
                 'student_id' => $request->studentId,
                 'classroom_id' => $request->classId,
-
             ];
         }
 

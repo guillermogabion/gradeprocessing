@@ -17,7 +17,8 @@ class studentAssessment extends Model
         'score',
         'max_score',
         'image',
-        'date'
+        'date',
+        'percentage'
     ];
 
     public function student()

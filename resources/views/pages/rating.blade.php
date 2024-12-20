@@ -18,7 +18,7 @@
                                 <div class="col-lg-6 col-md-6">
                                     <form method="GET" action="{{ route('organizations-rating') }}">
                                         <div class="input-group">
-                                            <input type="text" name="search" class="form-control" placeholder="Search subject..." value="{{ request()->query('search') }}">
+                                            <input type="text" name="search" class="form-control" placeholder="Search Student or Class ID" value="{{ request()->query('search') }}">
                                             <span class="input-group-append">
                                                 <button class="btn btn-outline-secondary" type="submit">Search</button>
                                             </span>
@@ -41,6 +41,7 @@
                                                 <th>Second Quarter</th>
                                                 <th>Third Quarter</th>
                                                 <th>Fourth Quarter</th>
+                                                <th>Average</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -49,10 +50,15 @@
                                                 <td>{{ $row->fullname }}</td>
                                                 <td>{{ $row->class_id }}</td>
                                                 <td>{{ $row->subject }}</td>
-                                                <td>{{ $row->first_quarter }}</td>
-                                                <td>{{ $row->second_quarter }}</td>
-                                                <td>{{ $row->third_quarter }}</td>
-                                                <td>{{ $row->fourth_quarter }}</td>
+                                                <td>{{ number_format($row->first_quarter * 100, 2) }}%</td>
+                                                <td>{{ number_format($row->second_quarter * 100, 2) }}%</td>
+                                                <td>{{ number_format($row->third_quarter * 100, 2) }}%</td>
+                                                <td>{{ number_format($row->fourth_quarter * 100, 2) }}%</td>
+                                                <td>{{ number_format(
+                                                        (($row->first_quarter + $row->second_quarter + $row->third_quarter + $row->fourth_quarter) / 4) * 100, 2)
+                                                    }}%
+                                                </td>
+
                                             </tr>
                                             @empty
                                             <tr>

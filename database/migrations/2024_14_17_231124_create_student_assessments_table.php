@@ -25,6 +25,7 @@ class CreateStudentAssessmentsTable extends Migration
             $table->enum('assessment_type', ['ww', 'pt', 'qa']);
             $table->string('score');
             $table->string('max_score');
+            $table->string('percentage');
             $table->string('date');
 
             $table->string('image')->nullable();

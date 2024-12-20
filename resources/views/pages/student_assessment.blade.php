@@ -166,13 +166,13 @@
                                 <div class="col-md-6 ">
                                     <div class="form-group">
                                         <label for="addScore">Score:</label>
-                                        <input type="text" name="score[]" class="form-control" required>
+                                        <input type="number" name="score[]" class="form-control" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6 ">
                                     <div class="form-group">
-                                        <label for="addMaxScore">Maximum Score:</label>
-                                        <input type="text" name="max_score[]" class="form-control" required>
+                                        <label for="addMaxScore">Total Items:</label>
+                                        <input type="number" name="max_score[]" class="form-control" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6 ">
@@ -333,10 +333,11 @@
 
             let id = $('#editId').val();
             let assessment_type = $('#editType').val();
-            let score = $('#editScore').val();
+            let gotScore = $('#editScore').val();
             let max_score = $('#editMaxScore').val();
             let date = $('#editDate').val();
             let quarter = $('#editQuarter').val();
+            let score = (gotScore / max_score) * 100;
 
             $.post('/assessment_update', {
                     _token: $('meta[name="csrf-token"]').attr('content'),
@@ -379,12 +380,26 @@
 
             const form = $(this);
 
-            // Ensure classId and studentId are included in the form submission
-            const studentId = $('#studentId').val();
-            const classId = $('#classId').val();
-
             // Log the form data for debugging
-            console.log(form.serialize());
+            console.log(form.serialize(), 'test');
+
+            // Loop through the input fields to calculate percentage
+            let totalItems = $('input[name="max_score[]"]');
+            let scores = $('input[name="score[]"]');
+            let percentages = [];
+
+            totalItems.each(function(index) {
+                let maxScore = $(this).val();
+                let score = $(scores[index]).val();
+
+                if (maxScore && score) {
+                    let percentage = (score / maxScore) * 100; // Calculate percentage based on max_score
+                    percentages.push(percentage);
+                }
+            });
+
+            // Log the calculated percentages for debugging
+            console.log(percentages);
 
             $.ajax({
                 url: '/assessment_add', // Replace with your endpoint
